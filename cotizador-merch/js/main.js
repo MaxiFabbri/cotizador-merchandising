@@ -1,35 +1,41 @@
 const impuestos = 5
-const cambioDolar = 1
-let ingresaPedido = prompt('Desea ingrsar una cotización: Si / No')
+let cambioDolar = 850
+
+var ingresaPedido = prompt('Desea ingrsar una cotización: Si / No')
 
 while (ingresaPedido.toLowerCase() == "si") {
-    console.log('la respuesta fue '+ingresaPedido)
     ingresoDeDatos()
     // tengo que sumarlo al array de cotizaciones realizadas
 
     
-    let ingresaPedido = prompt('Desea ingrsar una cotización: Si / No')
+    var ingresaPedido = prompt('Desea ingrsar otra cotización: Si / No')
 } 
 
 function calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos){
-    // calculo el costo Neto
+    // calculo el costo Neto y Total
     let costoNeto = ((cantidad*costoUnitario)+costoFijo)
-    console.log ('El costo Neto Dolar es: '+costoNeto)
-    // calculo el costo Total
-    let costoTotal = (otrosCostos+costoNeto)
+    let costoTotal = (costoNeto+otrosCostos)
     
     // llamo a la funcion que calcula la utilidad deseada, dependiendo del importe total
     const utilidadDeseada = calculaUtilidadDeseada(cantidad , costoUnitario , costoFijo )
     let porcentajeUtilidad = parseInt(utilidadDeseada.porcentajeUti)
     let utilidadMinima = parseInt(utilidadDeseada.utilidadMin)
 
-    // calculo el precio Unitario Probable
-    let precioUnitario = (costoTotal/(1-((porcentajeUtilidad+impuestos)/100)))/cantidad
-    console.log ('El precio Unitario Sugerido Dolar es: '+precioUnitario)
-
+    // calculo el precio Unitario Probable por rentabilidad de %
+    let precioUnitarioPorcentaje = (costoTotal/(1-((porcentajeUtilidad+impuestos)/100)))/cantidad
     
-    // muestro la utilidad deseada y la utilida minima
-    console.log(porcentajeUtilidad+' % y el minimo es: '+utilidadMinima)
+    // Calculo impuesto Estimado por la rentabilidad de %
+    let impuestoEstimado = ((precioUnitarioPorcentaje*cantidad)*(impuestos/100))
+
+    // calculo la utilidad con el precio Unitario Probable por rentabilidad de % contra la utilidad minima y defino la utilidad
+    let utilidadPorPorcentaje = ((precioUnitarioPorcentaje*cantidad)-costoTotal-impuestoEstimado)
+    
+    if (utilidadPorPorcentaje > utilidadMinima) {
+        var precioUnitario = precioUnitarioPorcentaje
+    } else {
+        var precioUnitario = (costoTotal + impuestoEstimado + utilidadMinima)/cantidad
+    }
+    console.log('El precio unitario de venta es: '+(precioUnitario*cambioDolar)+' y el precio total es: '+ (precioUnitario*cambioDolar*cantidad))
 }
 
 function ingresoDeDatos () {
