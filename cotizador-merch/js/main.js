@@ -1,24 +1,62 @@
 const impuestos = 5
-// probe sin el parse pero me hacía algunos calculos mal
-const cambioDolar = parseFloat(365)
+const cambioDolar = parseFloat(868.5)
+const Cotizaciones = []
 
-let ingresaPedido = prompt('Desea ingrsar una cotización: Si / No')
-
-while (ingresaPedido.toLowerCase() == "si") {
-    ingresoDeDatos()
-    // tengo que sumarlo al array de cotizaciones realizadas en proximas versiones
-
-    ingresaPedido = prompt('Desea ingrsar otra cotización: Si / No')
+class Cotizacion {
+    static id = 0
+    constructor (cliente, proveedor, producto, logo, cantidad, costoFijo, otrosCostos, precioUnitario) {
+        this.id = ++Cotizacion.id
+        this.cliente = cliente,
+        this.proveedor = proveedor,
+        this.producto = producto,
+        this.logo = logo,
+        this.cantidad = cantidad,
+        this.costoFijo = costoFijo,
+        this.otrosCostos = otrosCostos,
+        this.precioUnitario = precioUnitario
+    }
 }
+
+// Menu de inicio
+let menu = parseInt(prompt("Bienvenido! Elija:\n\n1 Para ver las cotizaciones,\n2 Para cargar una nueva cotización,\n3 Para salir"))
+
+while(menu !==3){
+    switch (menu) {
+        case 1:
+            verCotizaciones()
+            break
+        case 2:
+            ingresoDeDatos()
+            break 
+        default:
+            alert("Opcion incorrecta")
+            break
+    }
+    menu = parseInt(prompt("Bienvenido! Elija:\n\n1 Para ver las cotizaciones,\n2 Para cargar una nueva cotización,\n3 Para salir"))
+}
+
 
 function ingresoDeDatos () {
     // Le pido al usuario los datos para el calculo del precio y los paso a Dolares
+    let cliente = prompt('Ingrese Cliente:')
+    let proveedor = prompt('Ingrese Proveedor:')
+    let producto = prompt('Ingrese Producto:')
+    let logo = prompt('Ingrese Logo:')
     let cantidad = parseInt(prompt('Cantidad:'))
-    let costoUnitario = (parseInt(prompt('Costo Unitario:'))/cambioDolar)
-    let costoFijo = (parseInt(prompt('Costo Fijo:'))/cambioDolar)
-    let otrosCostos = (parseInt(prompt('Otros Costos:'))/cambioDolar)
-    calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos)
+    let costoUnitario = (parseFloat(prompt('Costo Unitario:'))/cambioDolar)
+    let costoFijo = (parseFloat(prompt('Costo Fijo:'))/cambioDolar)
+    let otrosCostos = (parseFloat(prompt('Otros Costos:'))/cambioDolar)
+    let precioUnitario = calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos)
+
+    console.log('Final - El precio unitario de venta es: '+(precioUnitario*cambioDolar).toFixed(1)+' y el precio total es: '+ (precioUnitario*cambioDolar*cantidad).toFixed(2))
+
+    // Creo una nueva cotización y la cargo en un array
+    const cotizacion = new Cotizacion(cliente, proveedor, producto, logo, cantidad, costoFijo, otrosCostos, precioUnitario)
+    console.log(cotizacion)
+    Cotizaciones.push(cotizacion)
 }
+
+
 
 function calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos){
     // calculo el costo Neto y Total
@@ -26,7 +64,6 @@ function calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos){
     let costoTotal = (costoNeto+otrosCostos)
     
     // llamo a la funcion que calcula la utilidad deseada, dependiendo del importe total
-    // const utilidadDeseada = calculaUtilidadDeseada(cantidad , costoUnitario , costoFijo )
     const utilidadDeseada = calculaUtilidadDeseada(costoNeto)
     let porcentajeUtilidad = parseInt(utilidadDeseada.porcentajeUti)
     let utilidadMinima = parseInt(utilidadDeseada.utilidadMin)
@@ -46,6 +83,7 @@ function calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos){
         var precioUnitario = (costoTotal + impuestoEstimado + utilidadMinima)/cantidad
     }
     console.log('El precio unitario de venta es: '+(precioUnitario*cambioDolar).toFixed(1)+' y el precio total es: '+ (precioUnitario*cambioDolar*cantidad).toFixed(2))
+    return precioUnitario   
 }
 
 
@@ -69,5 +107,14 @@ function calculaUtilidadDeseada (netCost) {
     }
 }
 
-
+// funcion para ver las cotizaciones ya realizadas
+function verCotizaciones () {
+    if (Cotizaciones.length === 0) {
+        console.log("No hay cotizaciones realizadas")
+    } else {
+        for (const cotizacion of Cotizaciones) {
+            console.log(cotizacion)
+        }
+    }
+}
 
