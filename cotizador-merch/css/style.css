@@ -15,18 +15,25 @@ h2{
 
 }
 .item-grilla{
-    margin: 5px 2px;
-    
+    margin: 5px 2px;  
 }
 .entrada-datos{
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     display: grid;
-    grid-template-columns: repeat(5, 1fr); 
-    grid-template-rows: 50px 50px;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: 17px 40px 17px 40px 12px 60px;
 }
 .out-precio{
     margin: 0px;
     border: 1px solid grey;
     padding: 4px;
-    font-size: 20px;
+    font-size: 26px;
+}
+.etiqueta-unitario{
+    padding: 6px;
+    font-size: 26px;
+    text-align: center;
+}
+label{
+    font-size: 16px;
 }
