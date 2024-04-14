@@ -4,7 +4,6 @@ let cambioDolar = parseFloat(868.5)
 let cotizaciones = []
 const fechaCorta = fecha => fecha.getDate()+"-"+(fecha.getMonth()+1)+"-"+fecha.getFullYear()
 
-
 // defino la tabla utilidades segun el costo total
 const escalasUtilidades = [
     {hasta: 408, utilidad: 30 , minimo: 82},
@@ -33,6 +32,29 @@ class Cotizacion {
     }
 }
 
+// funcion que busca el tipo de cambio Dolar Actualizado y lo guarda en LocalStorage
+const obtenerDolar = async () => {
+    let URL = "https://dolarapi.com/v1/dolares/oficial"
+    try {
+        let solicitud = await fetch(URL)
+        let response = await solicitud.json()
+        cambioDolar = response.venta
+        const cambioEnJson = JSON.stringify(cambioDolar)
+        localStorage.setItem('tipoCambio',cambioEnJson)
+    } catch (err) {
+        console.log("Error detectado, no se pudo recuperar el TC de la API: ", err)
+        try{
+            let tipoCambioLS = localStorage.getItem('tipoCambio')
+            cambioDolar = tipoCambioLS.json
+        } catch{
+            console.log("Error detectado, no se pudo recuperar el TC de la LS: ", err)
+        }
+    } finally {
+      console.log("1 El valor del dolar oficial es: $",cambioDolar)
+    }
+  }
+obtenerDolar()
+
 // funcion que agrega de a 1 cotizacion a la tabla HTML en forma de <tr> Table Row
 let mostrarCotizaciones = document.getElementById("cuerpoDeTabla")
 function agregarCotizATabla(cotiz) {
@@ -51,7 +73,7 @@ function agregarCotizATabla(cotiz) {
     mostrarCotizaciones.appendChild(fila)
 }
 
-// Reviso el Local Storage y recupero los datos y los pongo en el Array Cotizaciones
+// Reviso el Local Storage y recupero los datos de cotizaciones y los pongo en el Array Cotizaciones
 let cotizacionesLS = localStorage.getItem('cotizaciones')
 if (cotizacionesLS) {
     let cotizacionesProv =[]
@@ -62,6 +84,7 @@ if (cotizacionesLS) {
 } else {
     cotizaciones = []
 }
+
 
 // Creo el evento sobre el boton cotizar
 let cotizar = document.getElementById("botonCotizar")
@@ -123,7 +146,6 @@ function calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos){
     } else {
         var precioUnitario = (costoTotal + impuestoEstimado + utilidadMinima)/cantidad
     }
-    // console.log('El precio unitario de venta es: '+(precioUnitario*cambioUsado).toFixed(1)+' y el precio total es: '+ (precioUnitario*cambioUsado*cantidad).toFixed(2))
     return precioUnitario 
 }
 
