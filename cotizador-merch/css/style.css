@@ -37,3 +37,19 @@ h2{
 label{
     font-size: 16px;
 }
+
+.barra-buscar{
+    display: flex;
+    font-size: 22px;
+    font-weight: 450;
+    padding: 10px;
+}
+.buscar{
+    padding: 7px 25px;
+    margin: 0px;
+}
+.input-buscar{
+    height: 48 px;
+    font-weight: 400;
+    font-size: 20px;
+}

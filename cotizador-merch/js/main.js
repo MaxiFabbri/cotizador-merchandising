@@ -49,9 +49,7 @@ const obtenerDolar = async () => {
         } catch{
             console.log("Error detectado, no se pudo recuperar el TC de la LS: ", err)
         }
-    } finally {
-      console.log("1 El valor del dolar oficial es: $",cambioDolar)
-    }
+    } 
   }
 obtenerDolar()
 
@@ -87,37 +85,39 @@ if (cotizacionesLS) {
 
 
 // Creo el evento sobre el boton cotizar
-let cotizar = document.getElementById("botonCotizar")
-cotizar.onclick = () => { inputDatos()}
+// let cotizar = document.getElementById("botonCotizar")
+// cotizar.onclick = () => { inputDatos()}
 
-// Input de Datos por HTML
-function inputDatos() {
-    let cambioUsado = cambioDolar
-    let fecha = fechaCorta(hoy)
-    let cliente = (document.getElementById("inCliente")).value
-    let proveedor = (document.getElementById("inProveedor")).value
-    let producto = (document.getElementById("inProducto")).value
-    let logo = (document.getElementById("inLogo")).value
-    let cantidad = (document.getElementById("inCantidad")).value
-    let costoUnitario = ((document.getElementById("inCostoUnitario")).value/cambioUsado)
-    let costoFijo = ((document.getElementById("inCostoFijo")).value/cambioUsado)
-    let otrosCostos = ((document.getElementById("inOtrosCostos")).value/cambioUsado)
+// // Input de Datos por HTML
+// function inputDatos() {
+//     let cambioUsado = cambioDolar
+//     let fecha = fechaCorta(hoy)
+//     let cliente = (document.getElementById("inCliente")).value
+//     let proveedor = (document.getElementById("inProveedor")).value
+//     let producto = (document.getElementById("inProducto")).value
+//     let logo = (document.getElementById("inLogo")).value
+//     let cantidad = (document.getElementById("inCantidad")).value
+//     let costoUnitario = ((document.getElementById("inCostoUnitario")).value/cambioUsado)
+//     let costoFijo = ((document.getElementById("inCostoFijo")).value/cambioUsado)
+//     let otrosCostos = ((document.getElementById("inOtrosCostos")).value/cambioUsado)
     
-    // llamo a la funcion que Calcula el precio calculoPrecio
-    let precioUnitario = calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos)
+//     // llamo a la funcion que Calcula el precio calculoPrecio
+//     let precioUnitario = calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos)
 
-    // Muestro el precio en la Web
-    document.getElementById("outPrecioUnitario").innerText = (precioUnitario*cambioUsado).toFixed(2)
+//     // Muestro el precio en la Web
+//     document.getElementById("outPrecioUnitario").innerText = (precioUnitario*cambioUsado).toFixed(2)
     
-    nuevaCotizacion (fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario, costoFijo, otrosCostos, precioUnitario)
+//     nuevaCotizacion (fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario, costoFijo, otrosCostos, precioUnitario)
 
-    const cotizacionesEnJson = JSON.stringify(cotizaciones)
-    localStorage.setItem('cotizaciones',cotizacionesEnJson)
-}
+//     const cotizacionesEnJson = JSON.stringify(cotizaciones)
+//     localStorage.setItem('cotizaciones',cotizacionesEnJson)
+// }
 
 // Creo una nueva cotización instancia de la Clase "Cotizacion" y la cargo en un array "Cotizaciones" y la muestro en la tabla
-function nuevaCotizacion (fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario, costoFijo, otrosCostos, precioUnitario) {
-    const cotizacion = new Cotizacion(fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario, costoFijo, otrosCostos, precioUnitario)
+function nuevaCotizacion (fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario, costoFijo,
+     otrosCostos, precioUnitario) {
+    const cotizacion = new Cotizacion(fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario,
+         costoFijo, otrosCostos, precioUnitario)
     cotizaciones.push(cotizacion)
     agregarCotizATabla(cotizacion)
 }
