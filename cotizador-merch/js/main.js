@@ -3,15 +3,24 @@ const hoy = new Date()
 let cambioDolar = parseFloat(868.5)
 let cotizaciones = []
 const fechaCorta = fecha => fecha.getDate()+"-"+(fecha.getMonth()+1)+"-"+fecha.getFullYear()
+let escalasUtilidades = []
 
-// defino la tabla utilidades segun el costo total
-const escalasUtilidades = [
-    {hasta: 408, utilidad: 30 , minimo: 82},
-    {hasta: 1429, utilidad: 28 , minimo: 188},
-    {hasta: 2041, utilidad: 25 , minimo: 597},
-    {hasta: 4082, utilidad: 22 , minimo: 729},
-    {hasta: 9999999999, utilidad: 20 , minimo: 1230}
-]
+// // defino la tabla utilidades segun el costo total
+// const escalasUtilidades = [
+//     {hasta: 408, utilidad: 30 , minimo: 82},
+//     {hasta: 1429, utilidad: 28 , minimo: 188},
+//     {hasta: 2041, utilidad: 25 , minimo: 597},
+//     {hasta: 4082, utilidad: 22 , minimo: 729},
+//     {hasta: 9999999999, utilidad: 20 , minimo: 1230}
+// ]
+
+// Busco la tabla de datos en un archivo json
+fetch("./db/data.json")
+.then(response => response.json())
+.then(data => {
+    escalasUtilidades = data;
+    console.log(escalasUtilidades)
+})
 
 // Creo la Clase Cotizaciones con todos los datos relevantes
 class Cotizacion {
