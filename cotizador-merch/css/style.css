@@ -10,11 +10,34 @@ body{
     background-color: rgb(230, 230, 230);
 }
 h1{
-    
+   font-size: 30px;
+   margin: 4px 0px;
+   
 }
 h2{
 
 }
+.barra-buscar{
+    display: grid;
+    grid-template-columns: 18% 64% 8% 10%;
+    padding: 10px;
+    align-items: center;
+}
+.nueva-cotizacion{
+    height: 30px;
+    width: 200px;
+}
+.buscar{
+    font-size: 20px;
+    padding: 7px 25px;
+    margin: 0px;
+}
+.input-buscar{
+    height: 30 px;
+    font-weight: 400;
+    font-size: 20px;
+}
+
 .item-grilla{
     margin: 5px 2px;  
 }
@@ -38,18 +61,4 @@ label{
     font-size: 16px;
 }
 
-.barra-buscar{
-    display: flex;
-    font-size: 22px;
-    font-weight: 450;
-    padding: 10px;
-}
-.buscar{
-    padding: 7px 25px;
-    margin: 0px;
-}
-.input-buscar{
-    height: 48 px;
-    font-weight: 400;
-    font-size: 20px;
-}
+
