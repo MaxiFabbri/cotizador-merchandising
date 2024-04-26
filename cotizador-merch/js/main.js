@@ -1,9 +1,19 @@
 const impuestos = 5;
 const hoy = new Date();
-let cambioDolar = parseFloat(868.5);
+let cambioDolar = {
+    cambio: parseFloat(868.5),
+    fecha: "1-1-2024"
+}
 let cotizaciones = [];
 const fechaCorta = fecha => fecha.getDate()+"-"+(fecha.getMonth()+1)+"-"+fecha.getFullYear();
 let escalasUtilidades = [];
+
+// Actualizo el TC si lo tengo guardado en la LS
+let tipoCambioLS = localStorage.getItem('tipoCambio');
+if(tipoCambioLS) {
+    // cambioDolar = tipoCambioLS.json;
+    cambioDolar = JSON.parse(tipoCambioLS)
+}
 
 // Creo la Clase Cotizaciones con todos los datos relevantes
 class Cotizacion {
@@ -30,17 +40,13 @@ const obtenerDolar = async () => {
     try {
         let solicitud = await fetch(URL);
         let response = await solicitud.json();
-        cambioDolar = response.venta;
+        cambioDolar.cambio = response.venta;
+        cambioDolar.fecha = fechaCorta(hoy);
+        console.log(cambioDolar);
         const cambioEnJson = JSON.stringify(cambioDolar);
         localStorage.setItem('tipoCambio',cambioEnJson);
     } catch (err) {
         console.log("Error detectado, no se pudo recuperar el TC de la API: ", err);
-        try{
-            let tipoCambioLS = localStorage.getItem('tipoCambio');
-            cambioDolar = tipoCambioLS.json;
-        } catch{
-            console.log("Error detectado, no se pudo recuperar el TC de la LS: ", err);
-        }
     } 
   }
 obtenerDolar();

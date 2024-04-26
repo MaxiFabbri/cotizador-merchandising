@@ -4,6 +4,9 @@ fetch("../db/data.json")
 .then(data => {
     escalasUtilidades = data;
 })
+// Muestro el valor del Dolar Vigente y la Fecha
+document.getElementById("tipoCambio").innerText = cambioDolar.cambio.toFixed(2);
+document.getElementById("fechaCambio").innerText = cambioDolar.fecha;
 
 // Creo el evento sobre el boton cotizar
 let cotizar = document.getElementById("botonCotizar");
@@ -25,7 +28,7 @@ if (cotizacionesLS) {
 
 // Input de Datos por HTML
 function inputDatos() {
-    let cambioUsado = cambioDolar;
+    let cambioUsado = cambioDolar.cambio;
     let fecha = fechaCorta(hoy);
     let cliente = (document.getElementById("inCliente")).value;
     let proveedor = (document.getElementById("inProveedor")).value;
@@ -35,22 +38,47 @@ function inputDatos() {
     let costoUnitario = ((document.getElementById("inCostoUnitario")).value/cambioUsado);
     let costoFijo = ((document.getElementById("inCostoFijo")).value/cambioUsado);
     let otrosCostos = ((document.getElementById("inOtrosCostos")).value/cambioUsado);
-    
-    // llamo a la funcion que Calcula el precio calculoPrecio
-    let precioUnitario = calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos);
+    // Valido que los datos sean positivos
+    if(cantidad>0 && costoUnitario>0 && costoFijo>=0 && otrosCostos>=0) {
+        // llamo a la funcion que Calcula el precio calculoPrecio
+        let precioUnitario = calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos);
 
-    // Muestro el precio en la Web
-    document.getElementById("outPrecioUnitario").innerText = (precioUnitario*cambioUsado).toFixed(2);
-    nuevaCotizacion (fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario, costoFijo, otrosCostos, precioUnitario);
+        // Muestro el precio en la Web
+        document.getElementById("outPrecioUnitario").innerText = (precioUnitario*cambioUsado).toFixed(2);
+        nuevaCotizacion (fecha, cambioUsado, cliente, proveedor, producto, logo, cantidad, costoUnitario, costoFijo, otrosCostos, precioUnitario);
+        
+        // Muestro un alerta con el precio y la opción de regresar o hacer otra cotización
+        mostrarSwalExito(precioUnitario, cambioUsado);
+        
+        const cotizacionesEnJson = JSON.stringify(cotizaciones);
+        localStorage.setItem('cotizaciones',cotizacionesEnJson);
+    } else {
+        mostrarSwalFallo();
+        if(cantidad<=0){
+            document.getElementById("inCantidad").classList.add("error");
+        } else {
+            document.getElementById("inCantidad").classList.remove("error");
+        }
+        if(costoUnitario<=0){
+            document.getElementById("inCostoUnitario").classList.add("error");
+        } else {
+            document.getElementById("inCostoUnitario").classList.remove("error");
+        }
+        if(costoFijo<0){
+            document.getElementById("inCostoFijo").classList.add("error");
+        } else {
+            document.getElementById("inCostoFijo").classList.remove("error");
+        }
+        if(otrosCostos<0){
+            document.getElementById("inOtrosCostos").classList.add("error");
+        } else {
+            document.getElementById("inOtrosCostos").classList.remove("error");
+        }  
+    }
     
-    // Muestro un alerta con el precio y la opción de regresar o hacer otra cotización
-    mostrarSweetAlert(precioUnitario, cambioUsado);
-    
-    const cotizacionesEnJson = JSON.stringify(cotizaciones);
-    localStorage.setItem('cotizaciones',cotizacionesEnJson);
 }
 // Función para mostrar el SweetAlert y redirigir
-function mostrarSweetAlert(precioUni, cambio) {
+function mostrarSwalExito(precioUni, cambio) {
     Swal.fire({
         title: "Cotización Realizada, Precio de Venta $ "+(precioUni*cambio).toFixed(2),
         text: "Desea realizar otra cotización?",
@@ -64,7 +92,13 @@ function mostrarSweetAlert(precioUni, cambio) {
         }
     });
   }
-
+  function mostrarSwalFallo() {
+    Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Alguno de los datos cargados es incorrecto"
+      });
+  }
 
 // Funcion que calcula el precio en base a los datos
 function calculoPrecio(cantidad, costoUnitario, costoFijo, otrosCostos){
