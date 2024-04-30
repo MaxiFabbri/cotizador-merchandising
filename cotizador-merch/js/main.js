@@ -11,7 +11,6 @@ let escalasUtilidades = [];
 // Actualizo el TC si lo tengo guardado en la LS
 let tipoCambioLS = localStorage.getItem('tipoCambio');
 if(tipoCambioLS) {
-    // cambioDolar = tipoCambioLS.json;
     cambioDolar = JSON.parse(tipoCambioLS)
 }
 
